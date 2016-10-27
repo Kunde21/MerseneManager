@@ -44,7 +44,7 @@ var (
 	baseURL, gpu72URL *url.URL
 	writeOpts         bool
 	jar, _            = cookiejar.New(nil) // cookiejar.New() doesn't have an error return path
-	timeout           = 10 * time.Second   // http timeout
+	timeout           = 30 * time.Second   // http timeout
 
 	workReg       = regexp.MustCompile(`(Factor)=.*(,[0-9]+){3}`)
 	resultReg     = regexp.MustCompile(`.*M([0-9]+) .*`)
@@ -186,7 +186,7 @@ func parseOpts() {
 	if sett.LogFile == "" {
 		return
 	}
-	file, err := os.OpenFile(sett.LogFile, os.O_APPEND|os.O_CREATE, 0664)
+	file, err := os.OpenFile(sett.LogFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
 		log.Fatalln("Error opening log file:", err)
 	}
@@ -431,7 +431,7 @@ func sendResults(dev device) (success bool) {
 		return false
 	}
 	defer res.Close()
-	sent, err := os.OpenFile(dev.files.sent, os.O_APPEND|os.O_CREATE, 0664)
+	sent, err := os.OpenFile(dev.files.sent, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
 		log.Println("GETWORK: Error opening result_sent.txt", err)
 		return false

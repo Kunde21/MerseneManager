@@ -159,7 +159,7 @@ func parseOpts() {
 	if sett.LogFile == "" {
 		return
 	}
-	file, err := os.OpenFile(sett.LogFile, os.O_APPEND|os.O_CREATE, 0664)
+	file, err := os.OpenFile(sett.LogFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0664)
 	if err != nil {
 		log.Fatalln("Error opening log file:", err)
 	}
@@ -311,7 +311,7 @@ func sendResults(dev device) (success bool) {
 	}
 	curr = bytes.Replace(curr, []byte("\r"), []byte("\n"), -1)
 
-	sent, err := os.OpenFile(dev.files.sent, os.O_APPEND|os.O_CREATE, 0664)
+	sent, err := os.OpenFile(dev.files.sent, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0664)
 	if err != nil {
 		log.Println("SENDRESULT: Error opening result_sent.txt", err)
 		return false
